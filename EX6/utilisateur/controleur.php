@@ -1,6 +1,6 @@
 <?php
 
-if (!isset ($_GET["action"])) {
+if (!isset ($_GET['action'])) {
 	die("requ&ecirc;te non autoris&eacute;e");
 }
 require "modele.php";
@@ -83,11 +83,11 @@ function creer(){
 
 function valider(){
 	// validation d'un compte
-	if ( !isset($_GET["cle"]) ) {
+	if ( !isset($_GET['cle']) ) {
 		// pas de données 
 		die("requ&ecirc;te non autoris&eacute;e");
 	}
-	$cle = $_GET["cle"];
+	$cle = $_GET['cle'];
 	echo $cle;
 	// recherche de l'utilisateur
 	$utilisateur = recupereEnregistrementParCle($cle);

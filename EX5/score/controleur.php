@@ -28,14 +28,7 @@ switch ($action) {
 // fonctions
 function lister(){
 	$titre = "Liste de score";
-	$con=connexion(); //adresse base de donnée, nom utilisateur, mdp et nom de base de donnée
-
-	if($con->connect_error){
-		die('#Erreur de connexion ('.$con->connect_errno.') '.$con->connect_error);
-	}
-	$titre = "Liste de score";
 	$liste = recupereTous();
-	fermeture($con);
 	require "vue_liste.php";
 }
 function creer(){

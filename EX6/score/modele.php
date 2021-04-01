@@ -12,7 +12,7 @@ function recupereTous(){
 
 function connexion() {
 	// connexion avec la BD
-	$con = new mysqli("localhost", "mooc", "#m_ad", "mooc_ad");
+	$con = new mysqli("localhost", "root", "root", "dbname");
 	return $con;
 }
 
@@ -55,4 +55,3 @@ function supprimeEnregistrement($id){
 }	
 	
 ?>
-
