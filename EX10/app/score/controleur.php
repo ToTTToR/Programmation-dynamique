@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 if (!isset ($_GET["action"])) {
 	die("requ&ecirc;te non autoris&eacute;e");
 }
@@ -31,20 +33,29 @@ function lister(){
 	// récupération des enregistrements 
 	$result = recupereTous();
 	// création code HTML
-	$corps = "<ul>"; 
+	$corps = "<p><ul>"; 
 	while($r = $result->fetch_assoc()) {
 	   	$corps .= "<li>";
 		$corps .= $r['id'].", ".$r['valeur'];
 		// liens 
-		$corps .= " - <a href=\"controleur.php?action=modifier&id=".$r['id']."\">Modifier</a>";
-		$corps .= " | <a href=\"controleur.php?action=supprimer&id=".$r['id']."\">Supprimer</a>";
+		if(!isset($_SESSION['id']) && $_SESSION['id'] == $r['idUtilisateur']){
+			$corps .= " - <a href=\"controleur.php?action=modifier&id=".$r['id']."\">Modifier</a>";
+			$corps .= " | <a href=\"JavaScript:alertFunction(".$r['id'].")\">Supprimer</a>";
+		}
 		$corps .= "</li>";
 	}
-	$corps .= "</ul>"; 
-	// lien pour création de score
-	$corps .= "<a href=\"controleur.php?action=creer\">Cr&eacute;er</a>";
-	// lien pour création de compte
+	$corps .= "</ul></p>"; 
+	// lien pour création
+	$message="";
+	$corps .= "<script type='text/javascript'>function alertFunction(idE){ var r=confirm('Voulez-vous vraiment supprimer cet enregistrement?'); if(r==true){ var lien ='controleur.php?action=supprimer&id='+idE; location.replace(lien);}}</script>";
 	$corps .= "<br><a href=\"../utilisateur/controleur.php?action=creer\">S'enregistrer</a>";
+	// lien pour authentification
+	if ( !isset( $_SESSION['mail'] ) ) {		
+		$loginLogout = "<a href=\"../authentification/controleur.php?action=login\">Login</a>";
+	} else {
+		$loginLogout = $_SESSION['mail']." - <a href=\"../authentification/controleur.php?action=logout\">Logout</a>";
+	}
+	
 	// affichage de la vue
 	require "vue.php"; 
 }
@@ -103,6 +114,7 @@ function modifier(){
 	}
 }
 function afficherFormulaire($mode, $donnees, $erreurs){
+	$loginLogout = "";
 	if($mode == "creation"){
 		$titre = "Création";
 		$action = "creer";
@@ -114,7 +126,6 @@ function afficherFormulaire($mode, $donnees, $erreurs){
 	$valeur = $donnees['valeur'];
 	$id = $donnees['id'];
 	$erreurValeur = $erreurs['valeur'];
-	$loginLogout ="";
 	$corps = <<<EOT
 <form id="creation-form" name="creation-form" method="post" action="controleur.php?action=$action">
 <label for="valeur">Score</label>
@@ -130,7 +141,7 @@ EOT;
 }
 
 function testDonnees($donnees){
-	$erreurs = array();
+	$erreurs = [];
 	// test si le score est une valeur numérique
 	if (!is_numeric($donnees['valeur'])) {
 		$erreurs['valeur'] = "la valeur entrée doit être un nombre";

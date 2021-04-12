@@ -157,7 +157,7 @@ function envoiMailConfirmation($donnees){
 	$message = 'Bienvenue sur VotreSite,
 Pour activer votre compte, veuillez cliquer sur le lien ci dessous
 ou copier/coller dans votre navigateur internet.
-http://localhost:8888/EX7/utilisateur/controleur.php?action=validation&cle='.urlencode($cle).'
+http://localhost:8888/EX8/utilisateur/controleur.php?action=validation&cle='.urlencode($cle).'
 ---------------
 Ceci est un mail automatique, Merci de ne pas y répondre.';
 	// envoi
